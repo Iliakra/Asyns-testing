@@ -1,32 +1,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import Character, {
-  Bowman, Swordsman, Magician, Daemon, Undead, Zombie,
-} from '../app';
+import json from '../parser';
+import read from '../reader';
 
-test('Class Bowman extend Character', () => {
-  const newBowman = new Bowman();
-  const received = newBowman;
-  const expected = {
-    life: 1, level: 0, health: 15, attack: 25, defence: 25,
-  };
-  expect(received).toEqual(expected);
-});
+jest.mock('../reader');
 
-test('Function levelUp works correctly', () => {
-  const newBowman = new Bowman();
-  newBowman.levelUp();
-  const received = newBowman;
-  const expected = {
-    life: 1, level: 1, health: 100, attack: 30, defence: 30,
-  };
-  expect(received).toEqual(expected);
-});
-
-
-test('Function levelUp throws Error', () => {
-  const newSword = new Swordsman();
-  expect(() => {
-    newSword.levelUp();
-  }).toThrow(new Error('нельзя повысить левел умершего!'));
+test('', async () => {
+  expect.assertions(1);
+  try {
+    const data = await read.mockReturnValue((reject) => {
+      throw new Error('Ошибка ввода!');
+    });
+    const value = await json(data);
+    const result = JSON.parse(value);
+    return result;
+  } catch (e) {
+    expect(e).toEqual(new Error('Ошибка ввода!'));
+    done();
+  }
 });
